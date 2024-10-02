@@ -1,0 +1,58 @@
+<div class="container mt-5" >
+  <h2>Gestionar Tareas</h2>
+  <form [formGroup]="tareaForm" (ngSubmit)="guardarTarea()">
+    <div class="mb-3">
+      <label for="titulo" class="form-label">Título de la tarea</label>
+      <input type="text" id="titulo" class="form-control" formControlName="titulo">
+      <div *ngIf="tareaForm.get('titulo')?.invalid && tareaForm.get('titulo')?.touched" class="text-danger">
+        El título es obligatorio y debe tener al menos 5 caracteres.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="fechaLimite" class="form-label">Fecha Límite</label>
+      <input type="date" id="fechaLimite" class="form-control" formControlName="fechaLimite">
+    </div>
+
+    <div formArrayName="personas" *ngFor="let persona of personas.controls; let i = index">
+      <div [formGroupName]="i" class="mb-3">
+        <div class="mt-2">
+          <label>Nombre Completo</label>
+          <input type="text" class="form-control" formControlName="nombre">
+          <div *ngIf="persona.get('nombre')?.invalid && persona.get('nombre')?.touched" class="text-danger">
+            Nombre obligatorio y mínimo 5 caracteres.
+          </div>
+        </div>
+
+        <div class="mt-2">
+          <label>Edad</label>
+          <input type="number" class="form-control" formControlName="edad">
+          <div *ngIf="persona.get('edad')?.invalid && persona.get('edad')?.touched" class="text-danger">
+            La edad debe ser mayor de 18 años.
+          </div>
+        </div>
+
+        <div formArrayName="habilidades" class="mt-2">
+          <div *ngFor="let habilidad of habilidades(i).controls; let j = index">
+            <div>
+              <label>Habilidad {{ j + 1 }}</label>
+              <div class="d-flex">
+                <input type="text" class="form-control" [formControlName]="j">
+                <button type="button" class="btn btn-danger btn-sm ms-4" (click)="eliminarHabilidad(i, j)">Eliminar Habilidad</button>
+              </div>
+              <div *ngIf="habilidades(i).at(j).invalid && habilidades(i).at(j).touched" class="text-danger">
+                La habilidad no puede estar vacía.
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary mt-3" (click)="agregarHabilidad(i)">Añadir Habilidad</button>
+        </div>
+
+        <button type="button" class="btn btn-danger mt-2" (click)="eliminarPersona(i)">Eliminar Persona</button>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-secondary mt-2 mb-5" (click)="nuevaPersona()">Añadir Persona</button>
+    <button type="submit" class="btn btn-success ms-4 mt-2  mb-5" [disabled]="tareaForm.invalid">Guardar Tarea</button>
+  </form>
+</div>

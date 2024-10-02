@@ -1,0 +1,25 @@
+<div class="container mt-5">
+  <div class="mt-5">
+    <h2>Tareas</h2>
+    <div class="mb-3">
+      <button class="btn btn-primary" (click)="filtrarTareas('todas')">Todas</button>
+      <button class="btn btn-success ms-3" (click)="filtrarTareas('completadas')">Completadas</button>
+      <button class="btn btn-warning ms-3" (click)="filtrarTareas('pendientes')">Pendientes</button>
+    </div>
+    <div *ngFor="let tarea of tareasFiltradas">
+      <h4>
+        <input type="checkbox" [checked]="tarea.completada" (change)="toggleCompletada(tarea)">
+        {{ tarea.titulo }} ({{ tarea.fechaLimite | date }})
+      </h4>
+      <p>Personas Asociadas:</p>
+      <p *ngFor="let persona of tarea.personas">
+        {{ persona.nombre }}, {{ persona.edad }} años
+        <span>Habilidades: </span><span *ngFor="let habilidad of persona.habilidades">
+          - {{ habilidad }}
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <button type="button" class="btn btn-secondary" (click)="volver()">Volver a gestionar tareas</button>
+</div>
